@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.IO;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public class MainManager : MonoBehaviour
 {
@@ -82,13 +85,19 @@ public class MainManager : MonoBehaviour
         }
     }
 
+    public void QuitGame()
+    {
+#if UNITY_EDITOR
+        EditorApplication.ExitPlaymode();
+#else
+        Application.Quit();
+#endif
+    }
+
     // Start is called before the first frame update
     void Start()
     {
         StartGame();
-
-        // how to get Ball object assigned after restart?
-
     }
 
     void Update()
@@ -113,6 +122,10 @@ public class MainManager : MonoBehaviour
                 m_GameOver = false;
                 m_Started = false;
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            }
+            else if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                QuitGame();
             }
         }
     }
